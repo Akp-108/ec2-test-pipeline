@@ -24,4 +24,5 @@ jobs:
       - name: SSH into EC2 and Create File
         run: |
           # ssh -o StrictHostKeyChecking=no user@3.139.90.56 "echo 'Hello, EC2!' > ~/example_file.txt"
-          ssh -i "test-atul-newrelic.pem" ec2-user@ec2-3-139-90-56.us-east-2.compute.amazonaws.com
+          chmod 400 ./test-atul-newrelic.pem
+          ssh -i "./test-atul-newrelic.pem" ec2-user@ec2-3-139-90-56.us-east-2.compute.amazonaws.com

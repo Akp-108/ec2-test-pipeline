@@ -13,16 +13,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
             
-      - name: Configure SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa 3.139.90.56 >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
+      # - name: Configure SSH Key
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh-keyscan -t rsa 3.139.90.56 >> ~/.ssh/known_hosts
+      #     chmod 644 ~/.ssh/known_hosts
+            #     ssh -o StrictHostKeyChecking=no user@3.139.90.56 "echo 'Hello, EC2!' > ~/example_file.txt"
+          # chmod 400 ./test-atul-newrelic.pem
+          # ssh -i -T "test-atul-newrelic.pem" ec2-user@ec2-3-139-90-56.us-east-2.compute.amazonaws.com
       
       - name: SSH into EC2 and Create File
         run: |
-          ssh -o StrictHostKeyChecking=no user@3.139.90.56 "echo 'Hello, EC2!' > ~/example_file.txt"
-          # chmod 400 ./test-atul-newrelic.pem
-          # ssh -i -T "test-atul-newrelic.pem" ec2-user@ec2-3-139-90-56.us-east-2.compute.amazonaws.com
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ec2-user@ec2-3-139-90-56.us-east-2.compute.amazonaws.com '

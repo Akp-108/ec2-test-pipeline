@@ -1,0 +1,26 @@
+name: Deploy and Create File on EC2
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch as needed
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Configure SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa 3.139.90.56 >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+      
+      - name: SSH into EC2 and Create File
+        run: |
+          ssh -o StrictHostKeyChecking=no user@3.139.90.56 "echo 'Hello, EC2!' > ~/example_file.txt"
